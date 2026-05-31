@@ -1,15 +1,15 @@
-import streamlit as st
+import hashlib
 import json
 import random
 import time
-import hashlib
 from datetime import datetime
+
+import streamlit as st
 
 st.set_page_config(page_title="易經數位占卜 | I-Ching Oracle", page_icon="☯️", layout="centered")
 
 st.markdown("""
     <style>
-    /* 使用 clamp(最小, 首選, 最大) 讓字體在手機上自動縮小，並加上 nowrap 防止文字斷行 */
     .hex-line { 
         font-size: clamp(14px, 4vw, 24px); 
         font-weight: bold; 
@@ -22,7 +22,6 @@ st.markdown("""
         font-weight: bold; 
         color: #b76e22; 
     }
-    
     .strategy-box { 
         background-color: #262730; 
         padding: 20px; 
@@ -35,6 +34,7 @@ st.markdown("""
     .strategy-box p { color: #FAFAFA !important; }
     </style>
 """, unsafe_allow_html=True)
+
 
 class IChingDB:
     def __init__(self, filepath: str = 'iching_db.json'):
@@ -51,10 +51,13 @@ class IChingDB:
 
     def get_hexagram(self, binary_key: str) -> dict:
         default_hex = {
-            "name_cn": "未知卦象", "name_en": "Unknown Hexagram",
-            "description_cn": "找不到對應的卦辭", "description_en": "Description not found"
+            "name_cn": "未知卦象", 
+            "name_en": "Unknown Hexagram",
+            "description_cn": "找不到對應的卦辭", 
+            "description_en": "Description not found"
         }
         return self.data.get(binary_key, default_hex)
+
 
 class YarrowDiviner:
     @staticmethod
@@ -78,6 +81,7 @@ class YarrowDiviner:
         seed_hash = hashlib.sha256((question + timestamp).encode('utf-8')).hexdigest()
         random.seed(int(seed_hash, 16))
         return [cls._get_yao() for _ in range(6)]
+
 
 class HexagramCast:
     def __init__(self, numbers: list[int], db: IChingDB):
@@ -128,7 +132,8 @@ class HexagramCast:
 
     def get_key_lines_text(self, lang="繁體中文") -> list:
         count = len(self.moving_lines)
-        if count == 0: return []
+        if count == 0: 
+            return []
         
         suffix = "_cn" if lang == "繁體中文" else "_en"
         base_lines = self.base_hex.get(f"lines{suffix}", [])
@@ -167,7 +172,9 @@ class HexagramCast:
                 result.append("【用六】利永貞。" if lang == "繁體中文" else "[Use of Sixes] Lasting perseverance furthers.")
             else:
                 result.append("【六爻全變】請直接參考下方「變卦」的整體卦辭。" if lang == "繁體中文" else "[All 6 Lines Change] Please refer to the Transformed Hexagram below.")
+        
         return result
+
 
 def draw_hexagram_lines(numbers: list[int], is_transformed: bool = False, lang="繁體中文"):
     visuals = []
@@ -181,16 +188,24 @@ def draw_hexagram_lines(numbers: list[int], is_transformed: bool = False, lang="
 
     for i, num in enumerate(reversed(numbers)):
         if not is_transformed:
-            if num == 9: line = f"███████ {l_old_yang}"
-            elif num == 8: line = f"███　███ {l_young_yin}"
-            elif num == 7: line = f"███████ {l_young_yang}"
-            elif num == 6: line = f"███　███ {l_old_yin}"
+            if num == 9: 
+                line = f"███████ {l_old_yang}"
+            elif num == 8: 
+                line = f"███　███ {l_young_yin}"
+            elif num == 7: 
+                line = f"███████ {l_young_yang}"
+            elif num == 6: 
+                line = f"███　███ {l_old_yin}"
         else:
-            if num in (9, 7): line = f"███　███ {l_yin}" if num == 9 else f"███████ {l_yang}"
-            else: line = f"███████ {l_yang}" if num == 6 else f"███　███ {l_yin}"
+            if num in (9, 7): 
+                line = f"███　███ {l_yin}" if num == 9 else f"███████ {l_yang}"
+            else: 
+                line = f"███████ {l_yang}" if num == 6 else f"███　███ {l_yin}"
         
         visuals.append(f"<div class='hex-line'>{line}</div>")
+        
     return "".join(visuals)
+
 
 col_title, col_lang = st.columns([4, 1])
 
@@ -223,7 +238,7 @@ ui = {
         "base_hex": "【本卦】",
         "trans_hex": "【變卦】",
         "no_trans": "無變卦",
-        "no_trans_desc": "**說明：** 本次占卜無動爻，請專注於本卦之啟示。",
+        "no_trans_desc": "<b>說明：</b> 本次占卜無動爻，請專注於本卦之啟示。",
         "ai_title": "### 🤖 讓 AI 成為您的解卦師",
         "ai_desc": "點擊下方代碼塊右上角的 **「複製」圖示**，將這段專屬 Prompt 貼給您慣用的 AI 模型，獲取深度解析。",
         "github_star": "⭐ 如果這套工具對您有幫助，歡迎到 GitHub 幫我點亮一顆星星！",
@@ -244,7 +259,7 @@ ui = {
         "base_hex": "[Base]",
         "trans_hex": "[Transformed]",
         "no_trans": "No Transformed Hexagram",
-        "no_trans_desc": "**Note:** No moving lines in this casting. Please focus on the base hexagram.",
+        "no_trans_desc": "<b>Note:</b> No moving lines in this casting. Please focus on the base hexagram.",
         "ai_title": "### 🤖 Let AI Be Your Divination Master",
         "ai_desc": "Click the **'Copy' icon** at the top right of the code block below and paste this prompt to your preferred AI model for a deep analysis.",
         "github_star": "⭐ If you enjoy this oracle, please consider giving me a star on GitHub!",
