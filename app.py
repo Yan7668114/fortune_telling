@@ -200,7 +200,7 @@ ui = {
     "繁體中文": {
         "subtitle": "閉上眼睛，在心中默想您的問題。心誠則靈，無徵不信。",
         "input_label": "請簡單描述您的問題：",
-        "input_placeholder": "例如：我該如何推進接下來的專案？",
+        "input_placeholder": "請在這裡輸入",
         "button": "☯️ 與天地共振，開始起卦",
         "warning": "請先輸入您想詢問的問題，為占卜注入意念。",
         "progress_1": "正在注入意念晶種...",
@@ -214,14 +214,14 @@ ui = {
         "no_trans_desc": "**說明：** 本次占卜無動爻，請專注於本卦之啟示。",
         "ai_title": "### 🤖 讓 AI 成為您的解卦師",
         "ai_desc": "點擊下方代碼塊右上角的 **「複製」圖示**，將這段專屬 Prompt 貼給您慣用的 AI 模型，獲取深度解析。",
-        "github_star": "⭐ 如果這套法器對您有幫助，歡迎到 GitHub 幫我們點亮一顆星星！",
+        "github_star": "⭐ 如果這套工具對您有幫助，歡迎到 GitHub 幫我點亮一顆星星！",
         "disclaimer_title": "⚠️ 免責聲明",
         "disclaimer_text": "本數位占卜系統與 AI 提示詞生成的結果僅供參考與娛樂用途，不構成任何醫療、法律、財務或心理諮商之專業建議。使用者應自行評估風險，開發者對基於本系統結果所作出的任何決策概不負責。"
     },
     "English": {
         "subtitle": "Close your eyes and focus on your question. Sincerity brings clarity.",
         "input_label": "Please describe your question briefly:",
-        "input_placeholder": "e.g., How should I proceed with my next project?",
+        "input_placeholder": "Please enter here",
         "button": "☯️ Resonate with Heaven and Earth to Cast",
         "warning": "Please enter your question first to infuse your intention.",
         "progress_1": "Infusing intention seed...",
@@ -235,7 +235,7 @@ ui = {
         "no_trans_desc": "**Note:** No moving lines in this casting. Please focus on the base hexagram.",
         "ai_title": "### 🤖 Let AI Be Your Divination Master",
         "ai_desc": "Click the **'Copy' icon** at the top right of the code block below and paste this prompt to your preferred AI model for a deep analysis.",
-        "github_star": "⭐ If you enjoy this oracle, please consider giving us a star on GitHub!",
+        "github_star": "⭐ If you enjoy this oracle, please consider giving me a star on GitHub!",
         "disclaimer_title": "⚠️ Disclaimer",
         "disclaimer_text": "The divination results and AI-generated prompts provided by this system are for entertainment and reference purposes only. They do not constitute professional medical, legal, financial, or psychological advice.Users assume full responsibility for any decisions made based on this tool, and the developer assumes no liability."
     }
@@ -390,6 +390,7 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 st.divider()
+
 st.markdown(f"""
 <div style="max-width: 650px; margin: 0 auto; color: rgba(250, 250, 250, 0.45); font-size: 13px; line-height: 1.6;">
     <p style="text-align: center; font-weight: bold; margin-bottom: 6px; color: rgba(250, 250, 250, 0.6);">{t['disclaimer_title']}</p>
