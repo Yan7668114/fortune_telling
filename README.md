@@ -15,27 +15,3 @@ To bridge ancient wisdom with modern tech, the system features an **AI Master Pr
 *   **💡 朱熹解卦指引 (Zhu Xi's Rule Integration)**：系統會自動判斷 0 到 6 個動爻的變化，精準提示使用者該閱讀哪一段卦辭或爻辭。
 *   **🌐 國際化無縫切換 (i18n UI)**：一鍵切換繁體中文與全英文介面，排版精美，適應各種螢幕尺寸。
 *   **🤖 AI 提示詞生成 (AI Prompt Generation)**：動態生成結合占卜狀態的專屬 Prompt，讓 AI 成為你的私人解卦師。
-
-## 🚀 快速開始 / Quick Start
-
-### 1. 體驗線上版本 / Live Demo
-點擊上方 Streamlit 徽章或[此處](https://your-streamlit-app-url.com)直接體驗線上服務。
-
-### 2. 本地端執行 / Run Locally
-
-**環境要求 (Prerequisites)**
-* Python 3.9+
-
-**安裝步驟 (Installation)**
-```bash
-# 1. 複製專案 (Clone the repo)
-git clone [https://github.com/Yan7668114/fortune_telling.git](https://github.com/Yan7668114/fortune_telling.git)
-
-# 2. 進入專案資料夾 (Navigate to directory)
-cd fortune_telling
-
-# 3. 安裝相依套件 (Install dependencies)
-pip install streamlit
-
-# 4. 啟動應用程式 (Run the app)
-streamlit run app.py
