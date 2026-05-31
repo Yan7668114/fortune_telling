@@ -1,14 +1,3 @@
-# ✧ 易經數位占卜法器 | I-Ching Oracle ✧
-
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://your-streamlit-app-url.com)
-[![Python Version](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-> 結合東方古典哲學與現代 AI 提示詞工程的數位占卜系統。  
-> A modern digital divination system blending ancient Eastern philosophy with AI prompt engineering.
-
-![App Screenshot](https://via.placeholder.com/800x400?text=Insert+Your+App+Screenshot+Here) *(請替換為你的實際網頁截圖 / Replace with your actual screenshot)*
-
 ## 📖 關於專案 / About The Project
 
 本專案將擁有三千年歷史的《易經》（I-Ching / Book of Changes）數位化，採用最正統的「大衍筮法」演算法進行虛擬起卦，並嚴格遵循南宋理學家朱熹的解卦法則來提取關鍵爻辭。
