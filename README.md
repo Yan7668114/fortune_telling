@@ -14,3 +14,21 @@
 ## 🌐 前往嘗試
 
 [開始你的第一次占卜](https://fortunetelling-gufhxte3gy3pk8sl74ouat.streamlit.app/)
+
+
+
+## 📖 About the Project
+
+This project digitizes the millennia-old art of divination. It utilizes the highly complex "Yarrow Stalk" (Da Yan) algorithm for virtual casting and strictly follows the divination rules of the Southern Song dynasty philosopher Zhu Xi to extract the key moving lines.
+
+## ✨ Core Features
+
+* **☯️ Yarrow Stalk Algorithm**: Faithfully recreates the probability distribution of the traditional 49 yarrow stalks, ensuring every cast resonates with Heaven and Earth.
+* **📜 Bilingual Database**: Features a comprehensive, built-in Chinese-English JSON database covering all 64 hexagrams and 384 lines, including hexagram names, judgments, and highly accurate translations.
+* **💡 Zhu Xi's Guidance**: The system automatically calculates the variations of 0 to 6 moving lines and precisely guides users on which specific judgment or line text to read.
+* **🌐 Seamless Localization**: One-click toggle between Traditional Chinese and full English interfaces, complete with elegant typography and responsive design for all screen sizes.
+* **🤖 Prompt Generation**: Dynamically generates a tailored prompt based on your exact divination state, turning any LLM into your personal I-Ching master.
+
+## 🌐 Try It Out
+
+[Start your first divination](https://fortunetelling-gufhxte3gy3pk8sl74ouat.streamlit.app/)
