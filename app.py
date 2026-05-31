@@ -9,8 +9,20 @@ st.set_page_config(page_title="易經數位占卜 | I-Ching Oracle", page_icon="
 
 st.markdown("""
     <style>
-    .hex-line { font-size: 24px; font-weight: bold; letter-spacing: 2px; line-height: 1.2; }
-    .gua-title { font-size: 28px; font-weight: bold; color: #b76e22; }
+    /* 使用 clamp(最小, 首選, 最大) 讓字體在手機上自動縮小，並加上 nowrap 防止文字斷行 */
+    .hex-line { 
+        font-size: clamp(14px, 4vw, 24px); 
+        font-weight: bold; 
+        letter-spacing: 1px; 
+        line-height: 1.2; 
+        white-space: nowrap; 
+    }
+    .gua-title { 
+        font-size: clamp(20px, 5vw, 28px); 
+        font-weight: bold; 
+        color: #b76e22; 
+    }
+    
     .strategy-box { 
         background-color: #262730; 
         padding: 20px; 
@@ -381,9 +393,10 @@ st.markdown("<br><br>", unsafe_allow_html=True)
 st.markdown(f"""
 <div style="text-align: center; margin-bottom: 20px;">
     <a href="https://github.com/Yan7668114/fortune_telling" target="_blank" 
-       style="text-decoration: none; color: #b76e22; border: 1.5px solid #b76e22; 
-              padding: 12px 28px; border-radius: 30px; font-size: 16px; 
-              font-weight: bold; transition: all 0.3s ease;">
+       style="display: inline-block; text-decoration: none; color: #b76e22; 
+              border: 1.5px solid #b76e22; padding: 12px 24px; border-radius: 30px; 
+              font-size: clamp(14px, 3vw, 16px); font-weight: bold; 
+              line-height: 1.5; max-width: 90%; transition: all 0.3s ease;">
         {t['github_star']}
     </a>
 </div>
