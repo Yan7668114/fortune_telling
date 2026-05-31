@@ -12,3 +12,5 @@
 *   **🤖 Prompt生成**：動態生成結合占卜狀態的專屬Prompt，讓AI成為你的私人解卦師。
 
 ## 🌐 前往嘗試
+
+[開始你的第一次占卜](https://fortunetelling-gufhxte3gy3pk8sl74ouat.streamlit.app/)
