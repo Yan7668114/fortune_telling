@@ -377,8 +377,6 @@ Please act as an I-Ching master and respond to my entire query strictly in Engli
 
         st.code(llm_prompt, language="markdown")
 
-        st.code(llm_prompt, language="markdown")
-
 st.markdown("<br><br>", unsafe_allow_html=True)
 st.markdown(f"""
 <div style="text-align: center; margin-bottom: 20px;">
@@ -390,8 +388,6 @@ st.markdown(f"""
     </a>
 </div>
 """, unsafe_allow_html=True)
-
-st.divider()
 
 st.divider()
 st.markdown(f"""
