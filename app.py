@@ -5,9 +5,6 @@ import time
 import hashlib
 from datetime import datetime
 
-# ==========================================
-# 網頁基本設定與樣式
-# ==========================================
 st.set_page_config(page_title="易經數位占卜 | I-Ching Oracle", page_icon="☯️", layout="centered")
 
 st.markdown("""
@@ -27,9 +24,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# ==========================================
-# 核心邏輯
-# ==========================================
 class IChingDB:
     def __init__(self, filepath: str = 'iching_db.json'):
         self.filepath = filepath
@@ -44,7 +38,6 @@ class IChingDB:
             return {}
 
     def get_hexagram(self, binary_key: str) -> dict:
-        # 為了相容雙語，預設值也改為雙語格式
         default_hex = {
             "name_cn": "未知卦象", "name_en": "Unknown Hexagram",
             "description_cn": "找不到對應的卦辭", "description_en": "Description not found"
@@ -132,7 +125,6 @@ class HexagramCast:
         if not base_lines:
             return ["*(提醒：爻辭資料庫尚未擴充 / Warning: Lines database not expanded yet)*"]
 
-        # 雙語前綴設定
         p_base = "【本卦動爻】" if lang == "繁體中文" else "[Base Moving Line]"
         p_sub = "【次要參考】" if lang == "繁體中文" else "[Secondary Ref]"
         p_main = "【主要核心】" if lang == "繁體中文" else "[Primary Core]"
@@ -165,13 +157,9 @@ class HexagramCast:
                 result.append("【六爻全變】請直接參考下方「變卦」的整體卦辭。" if lang == "繁體中文" else "[All 6 Lines Change] Please refer to the Transformed Hexagram below.")
         return result
 
-# ==========================================
-# 視覺化輔助函式
-# ==========================================
 def draw_hexagram_lines(numbers: list[int], is_transformed: bool = False, lang="繁體中文"):
     visuals = []
     
-    # 定義雙語標籤
     l_old_yang = "(老陽 ◯)" if lang == "繁體中文" else "(Old Yang ◯)"
     l_young_yin = "(少陰)" if lang == "繁體中文" else "(Young Yin)"
     l_young_yang = "(少陽)" if lang == "繁體中文" else "(Young Yang)"
@@ -192,14 +180,8 @@ def draw_hexagram_lines(numbers: list[int], is_transformed: bool = False, lang="
         visuals.append(f"<div class='hex-line'>{line}</div>")
     return "".join(visuals)
 
-# ==========================================
-# UI 介面構建 & 雙語字典
-# ==========================================
-
-# 1. 先建立頂部排版的兩大容器（4:1 的寬度比例）
 col_title, col_lang = st.columns([4, 1])
 
-# 2. 先執行右側欄位，取得使用者的語系選擇 (lang)
 with col_lang:
     st.markdown("<br>", unsafe_allow_html=True) 
     lang = st.selectbox(
@@ -208,14 +190,12 @@ with col_lang:
         label_visibility="collapsed"
     )
 
-# 3. 取得 lang 變數後，再回到左側欄位渲染對應的動態標題
 with col_title:
     if lang == "繁體中文":
         st.title("✧ 大衍筮法占卜 ✧")
     else:
         st.title("✧ I-Ching Oracle ✧")
 
-# UI 字典對照表
 ui = {
     "繁體中文": {
         "subtitle": "閉上眼睛，在心中默想您的問題。心誠則靈，無徵不信。",
@@ -234,6 +214,7 @@ ui = {
         "no_trans_desc": "**說明：** 本次占卜無動爻，請專注於本卦之啟示。",
         "ai_title": "### 🤖 讓 AI 成為您的解卦師",
         "ai_desc": "點擊下方代碼塊右上角的 **「複製」圖示**，將這段專屬 Prompt 貼給您慣用的 AI 模型，獲取深度解析。",
+        "github_star": "⭐ 如果這套法器對您有幫助，歡迎到 GitHub 幫我們點亮一顆星星！",
         "disclaimer_title": "⚠️ 免責聲明",
         "disclaimer_text": "本數位占卜系統與 AI 提示詞生成的結果僅供參考與娛樂用途，不構成任何醫療、法律、財務或心理諮商之專業建議。使用者應自行評估風險，開發者對基於本系統結果所作出的任何決策概不負責。"
     },
@@ -254,6 +235,7 @@ ui = {
         "no_trans_desc": "**Note:** No moving lines in this casting. Please focus on the base hexagram.",
         "ai_title": "### 🤖 Let AI Be Your Divination Master",
         "ai_desc": "Click the **'Copy' icon** at the top right of the code block below and paste this prompt to your preferred AI model for a deep analysis.",
+        "github_star": "⭐ If you enjoy this oracle, please consider giving us a star on GitHub!",
         "disclaimer_title": "⚠️ Disclaimer",
         "disclaimer_text": "The divination results and AI-generated prompts provided by this system are for entertainment and reference purposes only. They do not constitute professional medical, legal, financial, or psychological advice.Users assume full responsibility for any decisions made based on this tool, and the developer assumes no liability."
     }
@@ -264,22 +246,14 @@ suffix = "_cn" if lang == "繁體中文" else "_en"
 
 st.markdown(t["subtitle"])
 
-# ==========================================
-# 使用 st.form 將輸入框與按鈕綁定
-# ==========================================
 with st.form(key="divination_form", border=False):
     question = st.text_input(t["input_label"], placeholder=t["input_placeholder"])
-    # 表單內的按鈕必須使用 st.form_submit_button
     submit_button = st.form_submit_button(t["button"], use_container_width=True)
 
-# 將原本的 if st.button(...) 改為判定表單是否送出
 if submit_button:
     if not question.strip():
         st.warning(t["warning"])
     else:
-        # ==========================================
-        # 以下保留你原本的起卦邏輯，完全不用動
-        # ==========================================
         progress_bar = st.progress(0)
         status_text = st.empty()
         
@@ -299,7 +273,6 @@ if submit_button:
         cast_numbers = YarrowDiviner.cast(question)
         hex_cast = HexagramCast(numbers=cast_numbers, db=db)
         
-        # 顯示解卦策略
         st.markdown(f"""
         <div class="strategy-box">
             <h4>{t['strategy_title']}</h4>
@@ -307,7 +280,6 @@ if submit_button:
         </div>
         """, unsafe_allow_html=True)
         
-        # 顯示關鍵爻辭
         key_lines = hex_cast.get_key_lines_text(lang)
         if key_lines:
             st.markdown(t["key_lines_title"])
@@ -316,21 +288,15 @@ if submit_button:
         
         st.divider()
         
-      # 5. 雙欄排版顯示卦象 (分層對齊與動態標籤)
-        
-        # 動態設定卦辭的標籤
         desc_label = "**卦辭：**" if lang == "繁體中文" else "**Desc:**"
         
-        # 建立一個小函式來美化標題排版 (解決英文過長與非預期換行的問題)
         def format_gua_title(label, name, is_en):
             if is_en and " (" in name:
-                # 將 "Dui (The Joyous / Lake)" 切割，主動讓括號內容換行並套用副標題樣式
                 main_title, sub_title = name.split(" (", 1)
                 return f"<div class='gua-title' style='line-height: 1.3;'>{label} {main_title}<br><span style='font-size: 18px; opacity: 0.85;'>({sub_title}</span></div>"
             else:
                 return f"<div class='gua-title'>{label} {name}</div>"
 
-        # 第一層雙欄：專門顯示標題與卦辭
         col1_top, col2_top = st.columns(2)
         
         is_en = (lang == "English")
@@ -349,7 +315,6 @@ if submit_button:
 
         st.markdown("<br>", unsafe_allow_html=True) 
         
-        # 第二層雙欄：專門顯示視覺化爻象圖，確保左右絕對水平對齊
         col1_bot, col2_bot = st.columns(2)
         
         with col1_bot:
@@ -359,9 +324,6 @@ if submit_button:
             if hex_cast.trans_hex:
                 st.markdown(draw_hexagram_lines(hex_cast.numbers, is_transformed=True, lang=lang), unsafe_allow_html=True)
 
-        # ==========================================
-        # AI 解卦 Prompt 生成器
-        # ==========================================
         st.divider()
         st.markdown(t["ai_title"])
         st.markdown(t["ai_desc"])
@@ -415,7 +377,23 @@ Please act as an I-Ching master and respond to my entire query strictly in Engli
 
         st.code(llm_prompt, language="markdown")
 
-st.divider() # 加上一條淺色分隔線
+        st.code(llm_prompt, language="markdown")
+
+st.markdown("<br><br>", unsafe_allow_html=True)
+st.markdown(f"""
+<div style="text-align: center; margin-bottom: 20px;">
+    <a href="https://github.com/Yan7668114/fortune_telling" target="_blank" 
+       style="text-decoration: none; color: #b76e22; border: 1.5px solid #b76e22; 
+              padding: 12px 28px; border-radius: 30px; font-size: 16px; 
+              font-weight: bold; transition: all 0.3s ease;">
+        {t['github_star']}
+    </a>
+</div>
+""", unsafe_allow_html=True)
+
+st.divider()
+
+st.divider()
 st.markdown(f"""
 <div style="max-width: 650px; margin: 0 auto; color: rgba(250, 250, 250, 0.45); font-size: 13px; line-height: 1.6;">
     <p style="text-align: center; font-weight: bold; margin-bottom: 6px; color: rgba(250, 250, 250, 0.6);">{t['disclaimer_title']}</p>
