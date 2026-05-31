@@ -1,14 +1,10 @@
-## 📖 關於專案 / About The Project
+## 📖 關於專案
 
 本專案將擁有三千年歷史的《易經》（I-Ching / Book of Changes）數位化，採用最正統的「大衍筮法」演算法進行虛擬起卦，並嚴格遵循南宋理學家朱熹的解卦法則來提取關鍵爻辭。
 
 為了橋接現代科技，系統內建了**「AI 大師提示詞引擎」**，能自動將使用者的問題、占卜結果與解卦指引打包成完美的 Prompt，讓使用者可以直接貼給 ChatGPT、Claude 等大語言模型，獲取極具深度與現代視角的白話解析。
 
-This project digitizes the 3,000-year-old *I-Ching* (Book of Changes). It utilizes the authentic "Yarrow Stalk" algorithm for virtual casting and strictly follows the divination rules established by the Song dynasty philosopher Zhu Xi to extract key moving lines.
-
-To bridge ancient wisdom with modern tech, the system features an **AI Master Prompt Engine**. It automatically packages the user's question, the divination result, and Zhu Xi's guidance into a highly optimized prompt. Users can paste this into LLMs like ChatGPT or Claude for profound, modern interpretations.
-
-## ✨ 核心功能 / Key Features
+## ✨ 核心功能
 
 *   **☯️ 大衍筮法演算法 (Yarrow Stalk Algorithm)**：忠實還原傳統 49 根蓍草的機率分佈，每次起卦皆與天地共振。
 *   **📜 完整雙語資料庫 (Bilingual Database)**：內建 64 卦、384 爻的完整中英雙語 JSON 資料庫，包含卦名、卦辭與精準翻譯。
