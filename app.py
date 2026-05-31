@@ -300,7 +300,7 @@ if submit_button:
         
         st.divider()
         
-        desc_label = "**卦辭：**" if lang == "繁體中文" else "**Desc:**"
+        desc_label = "<b>卦辭：</b>" if lang == "繁體中文" else "<b>Desc:</b>"
         
         def format_gua_title(label, name, is_en):
             if is_en and " (" in name:
@@ -309,32 +309,67 @@ if submit_button:
             else:
                 return f"<div class='gua-title'>{label} {name}</div>"
 
-        col1_top, col2_top = st.columns(2)
-        
         is_en = (lang == "English")
         
-        with col1_top:
-            st.markdown(format_gua_title(t['base_hex'], hex_cast.base_hex['name' + suffix], is_en), unsafe_allow_html=True)
-            st.markdown(f"{desc_label} {hex_cast.base_hex['description' + suffix]}")
-            
-        with col2_top:
-            if hex_cast.trans_hex:
-                st.markdown(format_gua_title(t['trans_hex'], hex_cast.trans_hex['name' + suffix], is_en), unsafe_allow_html=True)
-                st.markdown(f"{desc_label} {hex_cast.trans_hex['description' + suffix]}")
-            else:
-                st.markdown(f"<div class='gua-title'>{t['no_trans']}</div>", unsafe_allow_html=True)
-                st.markdown(t["no_trans_desc"])
+        def md_to_html(text):
+            return text.replace("**說明：**", "<b>說明：</b>").replace("**Note:**", "<b>Note:</b>")
+        
+        base_title = format_gua_title(t['base_hex'], hex_cast.base_hex['name' + suffix], is_en)
+        base_desc = f"{desc_label} {hex_cast.base_hex['description' + suffix]}"
+        base_lines = draw_hexagram_lines(hex_cast.numbers, is_transformed=False, lang=lang)
+        
+        if hex_cast.trans_hex:
+            trans_title = format_gua_title(t['trans_hex'], hex_cast.trans_hex['name' + suffix], is_en)
+            trans_desc = f"{desc_label} {hex_cast.trans_hex['description' + suffix]}"
+            trans_lines = draw_hexagram_lines(hex_cast.numbers, is_transformed=True, lang=lang)
+        else:
+            trans_title = f"<div class='gua-title'>{t['no_trans']}</div>"
+            trans_desc = md_to_html(t["no_trans_desc"])
+            trans_lines = ""
 
-        st.markdown("<br>", unsafe_allow_html=True) 
-        
-        col1_bot, col2_bot = st.columns(2)
-        
-        with col1_bot:
-            st.markdown(draw_hexagram_lines(hex_cast.numbers, is_transformed=False, lang=lang), unsafe_allow_html=True)
-            
-        with col2_bot:
-            if hex_cast.trans_hex:
-                st.markdown(draw_hexagram_lines(hex_cast.numbers, is_transformed=True, lang=lang), unsafe_allow_html=True)
+        st.markdown(f"""
+<style>
+.gua-grid-container {{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}}
+.gua-card {{
+    display: flex;
+    flex-direction: column;
+}}
+.gua-text-area {{
+    margin-bottom: 25px;
+    font-size: 16px;
+    line-height: 1.6;
+}}
+.gua-lines-area {{
+    margin-top: auto; 
+}}
+</style>
+<div class="gua-grid-container">
+<div class="gua-card">
+<div class="gua-text-area">
+{base_title}
+<div style="margin-top: 8px;">{base_desc}</div>
+</div>
+<div class="gua-lines-area">
+{base_lines}
+</div>
+</div>
+<div class="gua-card">
+<div class="gua-text-area">
+{trans_title}
+<div style="margin-top: 8px;">{trans_desc}</div>
+</div>
+<div class="gua-lines-area">
+{trans_lines}
+</div>
+</div>
+</div>
+""", unsafe_allow_html=True)
 
         st.divider()
         st.markdown(t["ai_title"])
