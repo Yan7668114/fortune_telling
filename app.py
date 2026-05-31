@@ -195,9 +195,25 @@ def draw_hexagram_lines(numbers: list[int], is_transformed: bool = False, lang="
 # ==========================================
 # UI 介面構建 & 雙語字典
 # ==========================================
-st.title("✧ 易經數位占卜法器 / I-Ching Oracle ✧")
 
-lang = st.radio("🌐 選擇介面語言 / Select Language:", ["繁體中文", "English"], horizontal=True)
+# 1. 先建立頂部排版的兩大容器（4:1 的寬度比例）
+col_title, col_lang = st.columns([4, 1])
+
+# 2. 先執行右側欄位，取得使用者的語系選擇 (lang)
+with col_lang:
+    st.markdown("<br>", unsafe_allow_html=True) 
+    lang = st.selectbox(
+        "Language", 
+        options=["繁體中文", "English"],
+        label_visibility="collapsed"
+    )
+
+# 3. 取得 lang 變數後，再回到左側欄位渲染對應的動態標題
+with col_title:
+    if lang == "繁體中文":
+        st.title("✧ 大衍筮法占卜 ✧")
+    else:
+        st.title("✧ I-Ching Oracle ✧")
 
 # UI 字典對照表
 ui = {
@@ -217,7 +233,9 @@ ui = {
         "no_trans": "無變卦",
         "no_trans_desc": "**說明：** 本次占卜無動爻，請專注於本卦之啟示。",
         "ai_title": "### 🤖 讓 AI 成為您的解卦師",
-        "ai_desc": "點擊下方代碼塊右上角的 **「複製」圖示**，將這段專屬 Prompt 貼給您慣用的 AI 模型，獲取深度解析。"
+        "ai_desc": "點擊下方代碼塊右上角的 **「複製」圖示**，將這段專屬 Prompt 貼給您慣用的 AI 模型，獲取深度解析。",
+        "disclaimer_title": "⚠️ 免責聲明",
+        "disclaimer_text": "本數位占卜系統與 AI 提示詞生成的結果僅供參考與娛樂用途，不構成任何醫療、法律、財務或心理諮商之專業建議。使用者應自行評估風險，開發者對基於本系統結果所作出的任何決策概不負責。"
     },
     "English": {
         "subtitle": "Close your eyes and focus on your question. Sincerity brings clarity.",
@@ -235,7 +253,9 @@ ui = {
         "no_trans": "No Transformed Hexagram",
         "no_trans_desc": "**Note:** No moving lines in this casting. Please focus on the base hexagram.",
         "ai_title": "### 🤖 Let AI Be Your Divination Master",
-        "ai_desc": "Click the **'Copy' icon** at the top right of the code block below and paste this prompt to your preferred AI model for a deep analysis."
+        "ai_desc": "Click the **'Copy' icon** at the top right of the code block below and paste this prompt to your preferred AI model for a deep analysis.",
+        "disclaimer_title": "⚠️ Disclaimer",
+        "disclaimer_text": "The divination results and AI-generated prompts provided by this system are for entertainment and reference purposes only. They do not constitute professional medical, legal, financial, or psychological advice.Users assume full responsibility for any decisions made based on this tool, and the developer assumes no liability."
     }
 }
 
@@ -243,12 +263,23 @@ t = ui[lang]
 suffix = "_cn" if lang == "繁體中文" else "_en"
 
 st.markdown(t["subtitle"])
-question = st.text_input(t["input_label"], placeholder=t["input_placeholder"])
 
-if st.button(t["button"], use_container_width=True):
+# ==========================================
+# 使用 st.form 將輸入框與按鈕綁定
+# ==========================================
+with st.form(key="divination_form", border=False):
+    question = st.text_input(t["input_label"], placeholder=t["input_placeholder"])
+    # 表單內的按鈕必須使用 st.form_submit_button
+    submit_button = st.form_submit_button(t["button"], use_container_width=True)
+
+# 將原本的 if st.button(...) 改為判定表單是否送出
+if submit_button:
     if not question.strip():
         st.warning(t["warning"])
     else:
+        # ==========================================
+        # 以下保留你原本的起卦邏輯，完全不用動
+        # ==========================================
         progress_bar = st.progress(0)
         status_text = st.empty()
         
@@ -285,27 +316,38 @@ if st.button(t["button"], use_container_width=True):
         
         st.divider()
         
-       # 5. 雙欄排版顯示卦象 (分層對齊與動態標籤)
+      # 5. 雙欄排版顯示卦象 (分層對齊與動態標籤)
         
         # 動態設定卦辭的標籤
         desc_label = "**卦辭：**" if lang == "繁體中文" else "**Desc:**"
         
+        # 建立一個小函式來美化標題排版 (解決英文過長與非預期換行的問題)
+        def format_gua_title(label, name, is_en):
+            if is_en and " (" in name:
+                # 將 "Dui (The Joyous / Lake)" 切割，主動讓括號內容換行並套用副標題樣式
+                main_title, sub_title = name.split(" (", 1)
+                return f"<div class='gua-title' style='line-height: 1.3;'>{label} {main_title}<br><span style='font-size: 18px; opacity: 0.85;'>({sub_title}</span></div>"
+            else:
+                return f"<div class='gua-title'>{label} {name}</div>"
+
         # 第一層雙欄：專門顯示標題與卦辭
         col1_top, col2_top = st.columns(2)
         
+        is_en = (lang == "English")
+        
         with col1_top:
-            st.markdown(f"<div class='gua-title'>{t['base_hex']} {hex_cast.base_hex['name' + suffix]}</div>", unsafe_allow_html=True)
+            st.markdown(format_gua_title(t['base_hex'], hex_cast.base_hex['name' + suffix], is_en), unsafe_allow_html=True)
             st.markdown(f"{desc_label} {hex_cast.base_hex['description' + suffix]}")
             
         with col2_top:
             if hex_cast.trans_hex:
-                st.markdown(f"<div class='gua-title'>{t['trans_hex']} {hex_cast.trans_hex['name' + suffix]}</div>", unsafe_allow_html=True)
+                st.markdown(format_gua_title(t['trans_hex'], hex_cast.trans_hex['name' + suffix], is_en), unsafe_allow_html=True)
                 st.markdown(f"{desc_label} {hex_cast.trans_hex['description' + suffix]}")
             else:
                 st.markdown(f"<div class='gua-title'>{t['no_trans']}</div>", unsafe_allow_html=True)
                 st.markdown(t["no_trans_desc"])
 
-        st.markdown("<br>", unsafe_allow_html=True) # 增加文字與圖案之間的緩衝間距
+        st.markdown("<br>", unsafe_allow_html=True) 
         
         # 第二層雙欄：專門顯示視覺化爻象圖，確保左右絕對水平對齊
         col1_bot, col2_bot = st.columns(2)
@@ -372,3 +414,11 @@ if st.button(t["button"], use_container_width=True):
 Please act as an I-Ching master and respond to my entire query strictly in English."""
 
         st.code(llm_prompt, language="markdown")
+
+st.divider() # 加上一條淺色分隔線
+st.markdown(f"""
+<div style="max-width: 650px; margin: 0 auto; color: rgba(250, 250, 250, 0.45); font-size: 13px; line-height: 1.6;">
+    <p style="text-align: center; font-weight: bold; margin-bottom: 6px; color: rgba(250, 250, 250, 0.6);">{t['disclaimer_title']}</p>
+    <p style="text-align: justify; text-align-last: center; margin-top: 0;">{t['disclaimer_text']}</p>
+</div>
+""", unsafe_allow_html=True)
